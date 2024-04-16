@@ -243,7 +243,7 @@ onMounted(async () => {
     </div>
     <div v-if="showMenu" class="custom-menu" :style="{ top: menuPosition.y + 'px', left: menuPosition.x + 'px' }">
       <ul>
-        <li @click="editEvent">Edit Event</li>
+        <li @click="myModal.show()">Edit Event</li>
         <li @click="deleteEvent">Delete Event</li>
       </ul>
     </div>
@@ -294,7 +294,7 @@ onMounted(async () => {
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS">Aggiorna</button>
                     <button class="btn btn-outline-danger btn-sm" type="button" id="resetFS">Reset</button>
-                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button">Chiudi</button>
+                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="myModal.hide()">Chiudi</button>
                 </div>
             </div>
             
