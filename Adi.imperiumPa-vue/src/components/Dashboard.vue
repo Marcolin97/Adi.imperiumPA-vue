@@ -5,7 +5,35 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import itLocale from '@fullcalendar/core/locales/it';
 import { Modal } from 'bootstrap-italia';
 import axios from 'axios';
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import ContextMenu from '@imengyu/vue3-context-menu'
 
+const handleContextMenu = (event) => {
+  if (event.button === 2) {
+    event.preventDefault();
+    ContextMenu.showContextMenu({
+      x: event.pageX,
+      y: event.pageY,
+      items: [
+        { 
+          label: "Modifica Appuntamento", 
+          onClick: () => {
+            myModal.show();
+            selectedEvent.value = info.event;
+          }
+        },
+        { 
+          label: "A submenu", 
+          children: [
+            { label: "Item1" },
+            { label: "Item2" },
+            { label: "Item3" },
+          ]
+        },
+      ]
+    });
+  }
+};
 const baseUrl = 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api/Dizionari/GetPrestazioni';
 let myModal;
 const search1 = ref('');
@@ -13,19 +41,6 @@ const search2 = ref('');
 const date = ref('');
 const selectedEvent = ref(null);
 let elencoPrestazioni = ref([]);
-
-const showMenu = ref(false);
-const menuPosition = ref({ x: 0, y: 0 });
-
-const handleRightClick = (event) => {
-  event.preventDefault();
-  menuPosition.value.x = event.clientX;
-  menuPosition.value.y = event.clientY;
-  showMenu.value = true;
-  selectedEvent.value = null;
-};
-
-
 
 const event = [
     {
@@ -190,15 +205,25 @@ const calendarOptions = ref({
   eventClick: function(info) {
     myModal.show();
     selectedEvent.value = info.event;
+    handleContextMenu(info);
   },
 });
 
 const addEvent = () => {
- /*  calendarOptions.value.events.push({
-    title: `${search1.value}, ${search2.value}`,
-    start: date.value,
-  }); */
-};
+    calendarOptions.value.events.push({
+      id: 2,
+      title: `${search1.value}, ${search2.value}`,
+      start: date.value,
+      end: null,
+      codSogPuat: 3,
+      codOperatore: 8,
+      isAssente: false,
+      prestazioni: [],
+      backgroundColor: "",
+      borderColor: "",
+    });
+  };
+  
 
 const baseApi = axios.create({
   baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
@@ -221,12 +246,12 @@ onMounted(async () => {
       <div class="grid-container">
         <div class="form-group">
           <label class="visually-hidden">Cerca nel sito</label>
-          <input type="search" v-model="search1" placeholder="Testo da cercare">
+          <input type="search" v-model="search1" placeholder="Seleziona Operatore">
         </div>
         <div class="selOperatore">
           <div class="form-group">
             <label class="visually-hidden">Cerca nel sito</label>
-            <input type="search" v-model="search2" placeholder="Testo da cercare">
+            <input type="search" v-model="search2" placeholder="Seleziona Utente">
           </div>
         </div>
         <div class="datepicker">
@@ -235,17 +260,11 @@ onMounted(async () => {
             <input class="picker" type="datetime-local" v-model="date" id="dateStandard" name="dateStandard">
           </div>
         </div>
-        <button @click="addEvent">Add to Calendar</button>
+        <button @click="addEvent">aggiungi appuntamento al calendario</button>
       </div>
     </div>
-    <div class="calendar" @contextmenu.prevent="handleRightClick">
+    <div class="calendar" @contextmenu.prevent="handleContextMenu">
       <FullCalendar :options='calendarOptions' />
-    </div>
-    <div v-if="showMenu" class="custom-menu" :style="{ top: menuPosition.y + 'px', left: menuPosition.x + 'px' }">
-      <ul>
-        <li @click="myModal.show()">Edit Event</li>
-        <li @click="deleteEvent">Delete Event</li>
-      </ul>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="diagExecVisit">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -284,8 +303,8 @@ onMounted(async () => {
                           <hr />
                           <div class="grid-container-checkbox" id="optionDetVisita">
                               <div class="form-check" v-for="(prestazione, index) in elencoPrestazioni" :key="index">
-                                  <input type="checkbox" :id="'prestazione-' + index" :value="prestazione" :checked="selectedEvent.extendedProps.prestazioni.includes(prestazione.codice)">
-                                  <label :for="'prestazione-' + index">{{ prestazione.descrizione }}</label>
+                                <input type="checkbox" :id="'prestazione-' + index" :value="prestazione" :checked="selectedEvent && selectedEvent.extendedProps ? selectedEvent.extendedProps.prestazioni.includes(prestazione.codice) : false">
+                                <label :for="'prestazione-' + index">{{ prestazione.descrizione }}</label>
                               </div>
                           </div>
                       </div>
@@ -301,6 +320,7 @@ onMounted(async () => {
         </div>
     </div>
   </main>
+  
 </template>
 
 <style scoped>
@@ -334,28 +354,5 @@ onMounted(async () => {
     grid-template-columns: repeat(2, 1fr); 
     gap: 20px; 
     margin-top: 20px;
-}
-
-.custom-menu {
-  position: fixed;
-  z-index: 1000;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 5px 0;
-}
-
-.custom-menu ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.custom-menu ul li {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.custom-menu ul li:hover {
-  background-color: #f0f0f0;
 }
 </style>

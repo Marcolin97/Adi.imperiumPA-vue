@@ -12,8 +12,10 @@
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/vue3": "^6.1.11",
+    "@imengyu/vue3-context-menu": "^1.4.0",
     "bootstrap-italia": "^2.8.4",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

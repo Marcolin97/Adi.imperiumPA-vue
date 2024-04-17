@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import Dashboard from './components/Dashboard.vue';
+import Navbar from './components/Navbar.vue';
+import Footer from './components/Footer.vue';
+import { loadFonts } from 'bootstrap-italia';
+
+loadFonts('/node_modules/bootstrap-italia/dist/fonts');
+
 
 </script>
 
 <template>
-  <main>
-    <div class="container">
-      <Dashboard/>
-    </div>
-  </main>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <div>
+    <section>
+      <header>
+      <Navbar />
+    </header>
+    <main>
+      <div class="container">
+        <router-view />
+      </div>
+    </main>
+    <footer class="fixed-footer">
+      <Footer />
+    </footer>
+  </section>
+  </div>
 </template>
 
 <style scoped>
-.container{
-  max-width: 1800px;
+.app-wrapper {
+  position: relative;
+  min-height: 100vh;
 }
+
 </style>
