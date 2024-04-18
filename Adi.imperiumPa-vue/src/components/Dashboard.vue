@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import itLocale from '@fullcalendar/core/locales/it';
@@ -20,6 +20,18 @@ const search2 = ref('');
 const date = ref('');
 const selectedEvent = ref(null);
 let elencoPrestazioni = ref([]);
+let elencoOperatori = ref([]);
+
+//funzione che formatta il fine appuntamento per impostarlo nell'appuntamento del calendario
+let formattedEndTime = computed(() => {
+  if (selectedEvent.value && selectedEvent.value.end) {
+    const date = new Date(selectedEvent.value.end);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+  return '';
+});
 
 //costante provvisoria che crea appuntamenti nel calendario 
 const event = [
@@ -174,7 +186,7 @@ const handleContextMenu = (event) => {
     if(!event.target.classList.contains('fc-event')) {
       return;
     }
-    console.log(event);
+    console.log(selectedEvent.value);
     event.preventDefault();
     ContextMenu.showContextMenu({
       x: event.pageX,
@@ -188,13 +200,42 @@ const handleContextMenu = (event) => {
         },
         { 
           label: "Elimina Appuntamento", 
-          onClick: () => {            
+          onClick: () => {
+            selectedEvent.value.remove();
           }
-        },
+          },
       ]
     });
   
 };
+
+let Visita = 
+{
+ "codSoggPuat": 0,
+ "codOperatore": 0,
+ "progAppuntamento": 0,
+ "inizio": "",
+ "fine": "",
+ "codPrestazione": [],
+ "isAssente": false,
+ "isEseguita": true,
+ "repeatVisita": false,
+ "idUtente": 0
+};
+
+let CambioVisita =
+{
+ "codSoggPuat": 0,
+ "codOperatoreOld": 0,
+ "codOperatoreNew": 0,
+ "progAppuntamento": 0,
+ "inizio": "",
+ "fine": "",
+ "codMotivazione": 0,
+ "allVisite": false,
+ "idUtente": 0
+};
+
 
 //opzioni del calendario
 const calendarOptions = ref({
@@ -247,9 +288,21 @@ onMounted(async () => {
   });
   const res = await baseApi.get("dizionari/GetPrestazioni");
   elencoPrestazioni.value = res.data;
+  const res2 = await baseApi.get("dizionari/elencoOperatori");
+  elencoOperatori.value = res2.data;
 });
 
+const resetForm = () => {
+  selectedEvent.value.setExtendedProp('fineAppuntamento', null);
+  selectedEvent.value.setExtendedProp('isAssente', false);
+  selectedEvent.value.setExtendedProp('prestazioni', []);
+};
 
+const updateForm = () => {
+  /* selectedEvent.value.setExtendedProp('isAssente', isAssente);
+  selectedEvent.value.setExtendedProp('prestazioni', prestazioni); */
+  myModal.hide();
+};
 </script>
 
 <template>
@@ -278,17 +331,19 @@ onMounted(async () => {
     <div class="calendar">
       <FullCalendar :options='calendarOptions' />
     </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id="diagExecVisit">
+    <div class="modal fade" tabindex="-1" role="dialog" id="diagExecVisit" >
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content" v-if="selectedEvent">
                 <div class="modal-header d-block">
                     <h5 style="font-size:20px" class="modal-title text-center mb-4">Dettaglio Appuntamento</h5>
                     <div style="display:flex;justify-content:space-between">
-                        <h5 style="font-size:15px;align-self:start" class="modal-title" id="utenteAppuntamento"></h5><h5 style="font-size:15px;align-items:end" class="modal-title" id="opertaoreAppuntamento"></h5>
+                        <h5 style="font-size:15px;align-self:start" class="modal-title" id="utenteAppuntamento">Utente: <br> {{ selectedEvent.title }}</h5>
+                        <h5 style="font-size:15px;align-items:end" class="modal-title" id="operatoreAppuntamento">Operatore: <br> {{  }}</h5>
                     </div>
                     <h5 style="font-size:15px" class="modal-title" id="dataAppuntamento"></h5>
                 </div>
-                <div class="modal-body mt-4">
+                <div class="modal-body mt-4" >
+                
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-group" style="margin-bottom: 1rem">
@@ -299,7 +354,8 @@ onMounted(async () => {
                                     type="time"
                                     class="form-control"
                                     id="fineAppuntamento"
-                                    name="fineAppuntamento">
+                                    name="fineAppuntamento"
+                                    v-model="formattedEndTime">
                             </div>
                         </div>
                         <div class="col-sm-7 ml-4">
@@ -323,8 +379,8 @@ onMounted(async () => {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS">Aggiorna</button>
-                    <button class="btn btn-outline-danger btn-sm" type="button" id="resetFS">Reset</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS" @click="updateForm()">Aggiorna</button>
+                    <button class="btn btn-outline-danger btn-sm" type="button" id="resetFS" @click="resetForm()">Reset</button>
                     <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="myModal.hide()">Chiudi</button>
                 </div>
             </div>
