@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import itLocale from '@fullcalendar/core/locales/it';
@@ -21,6 +21,7 @@ const date = ref('');
 const selectedEvent = ref(null);
 let elencoPrestazioni = ref([]);
 let elencoOperatori = ref([]);
+let elencoPazienti = ref([]);
 
 //funzione che formatta il fine appuntamento per impostarlo nell'appuntamento del calendario
 let formattedEndTime = computed(() => {
@@ -209,9 +210,9 @@ const handleContextMenu = (event) => {
   
 };
 
-let Visita = 
+let Visita = reactive(
 {
- "codSoggPuat": 0,
+ "codSogPuat": 0,
  "codOperatore": 0,
  "progAppuntamento": 0,
  "inizio": "",
@@ -221,11 +222,11 @@ let Visita =
  "isEseguita": true,
  "repeatVisita": false,
  "idUtente": 0
-};
+});
 
-let CambioVisita =
+let CambioOperatore =
 {
- "codSoggPuat": 0,
+ "codSogPuat": 0,
  "codOperatoreOld": 0,
  "codOperatoreNew": 0,
  "progAppuntamento": 0,
@@ -233,6 +234,20 @@ let CambioVisita =
  "fine": "",
  "codMotivazione": 0,
  "allVisite": false,
+ "idUtente": 0
+};
+
+let UpdateVisita =
+{
+ "codSogPuat": 0,
+ "codOperatore": 0,
+ "progAppuntamento": 0,
+ "inizio": "",
+ "fine": "",
+ "codPrestazione": [],
+ "isAssente": false,
+ "isEseguita": true,
+ "repeatVisita": false,
  "idUtente": 0
 };
 
@@ -288,8 +303,10 @@ onMounted(async () => {
   });
   const res = await baseApi.get("dizionari/GetPrestazioni");
   elencoPrestazioni.value = res.data;
-  const res2 = await baseApi.get("dizionari/elencoOperatori");
+  const res2 = await baseApi.get("Soggetti/ElencoOperatori");
   elencoOperatori.value = res2.data;
+  const res3 = await baseApi.get("Pazienti/ElencoPazienti");
+  elencoPazienti.value = res3.data;
 });
 
 const resetForm = () => {
@@ -307,16 +324,16 @@ const updateForm = () => {
 
 <template>
   <main>
-    <div>
+    <!-- <div>
       <div class="grid-container">
         <div class="form-group">
           <label class="visually-hidden">Cerca nel sito</label>
-          <input type="search" v-model="search1" placeholder="Seleziona Operatore">
+          <input type="search" v-model="elencoOperatori" placeholder="Seleziona Operatore">
         </div>
         <div class="selOperatore">
           <div class="form-group">
             <label class="visually-hidden">Cerca nel sito</label>
-            <input type="search" v-model="search2" placeholder="Seleziona Utente">
+            <input type="search" v-model="elencoPazienti" placeholder="Seleziona Utente">
           </div>
         </div>
         <div class="datepicker">
@@ -327,6 +344,78 @@ const updateForm = () => {
         </div>
         <button @click="addEvent">aggiungi appuntamento al calendario</button>
       </div>
+    </div> -->
+    <pre>
+        {{ Visita }} 
+    </pre>
+    <div class="row justify-content-center flex-row align-items-center" id="rowSetApp">
+        <div class="col-lg-12">
+            <div class="row mt-4">
+              <div class="col-sm-6 col-md-3 col-lg-3">
+  <div class="form-group" id="fgSelOperatore">
+    <div class="select-wrapper">
+      <label for="selOperatore" class="active">Operatore</label>
+      <select class="form-control"
+          v-model="Visita.codOperatore"
+          placeholder="Seleziona Operatore"
+          name="selOperatore"
+          id="selOperatore">
+          <option value="">Scegli un operatore</option>
+          <option v-for="operatore in elencoOperatori" :value="operatore.value">
+              {{ operatore.text }}
+          </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="col-sm-6 col-md-3 col-lg-3">
+  <div class="form-group" id="fgSelPaziente">
+    <div class="select-wrapper">
+      <label for="selPaziente" class="active">Utente</label>
+      <select class="form-control"
+          v-model="Visita.codSogPuat"
+          placeholder="Seleziona Utente"
+          id="selPaziente">
+          <option value="">Scegli un utente</option>
+          <option v-for="paziente in elencoPazienti" :value="paziente.codSogPuat">
+              {{ paziente.nome }} {{ paziente.cognome }} - {{ paziente.codFiscale }}
+          </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="col-sm-6 col-md-3 col-lg-3">
+  <div class="form-group">
+    <label for="dvInizio">Inizio visita</label>
+    <input autocomplete="off"
+        v-model="Visita.inizio"
+        title=""
+        type="datetime-local"
+        aria-required="true"
+        id="dvInizio"
+        class="form-control"
+        min="1900-01-01"
+        max="5000-12-31"
+        placeholder="Data/Ora Visita"
+        name="dvInizio">
+    <div class="invalid-feedback">
+        Immettere la data/ora di inizio visita.
+    </div>
+  </div>
+</div>
+                <div class="col-sm-6 col-md-2 col-lg-2">
+                    <div class="form-group" style="margin-bottom: 1rem">
+                      <div class="form-check">
+                        <input type="checkbox" id="finoFine" v-model="Visita.repeatVisita">
+                        <label id="lbFinoFine" for="finoFine">Ripeti fino al termine</label>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-1 col-lg-1">
+                  <button id="addVisita" type="button" class="btn btn-outline-primary btn-sm" @click="addEvent" ><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="calendar">
       <FullCalendar :options='calendarOptions' />
@@ -334,11 +423,11 @@ const updateForm = () => {
     <div class="modal fade" tabindex="-1" role="dialog" id="diagExecVisit" >
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content" v-if="selectedEvent">
-                <div class="modal-header d-block">
+                <div class="modal-header d-block" v-if="elencoPazienti">
                     <h5 style="font-size:20px" class="modal-title text-center mb-4">Dettaglio Appuntamento</h5>
                     <div style="display:flex;justify-content:space-between">
-                        <h5 style="font-size:15px;align-self:start" class="modal-title" id="utenteAppuntamento">Utente: <br> {{ selectedEvent.title }}</h5>
-                        <h5 style="font-size:15px;align-items:end" class="modal-title" id="operatoreAppuntamento">Operatore: <br> {{  }}</h5>
+                        <h5 style="font-size:15px;align-self:start" class="modal-title" id="utenteAppuntamento">operatore: <br> {{ selectedEvent.title }}</h5>
+                        <h5 style="font-size:15px;align-items:end" class="modal-title" id="operatoreAppuntamento">utente: <br> {{ elencoPazienti.nome }}</h5> <!-- no -->
                     </div>
                     <h5 style="font-size:15px" class="modal-title" id="dataAppuntamento"></h5>
                 </div>
@@ -384,7 +473,6 @@ const updateForm = () => {
                     <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="myModal.hide()">Chiudi</button>
                 </div>
             </div>
-            
         </div>
     </div>
   </main>
