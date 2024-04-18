@@ -485,7 +485,7 @@
                                 <input type="file" name="upload1" id="loadFileSogg" accept="application/pdf,.png, .tiff, .tif, .jpeg, .jpg, .bmp, .doc, .docx" class="upload" />
                                 <label for="loadFileSogg">
                                     <svg class="icon icon-sm" aria-hidden="true">
-                                        <use href="/node_modules/bootstrap-italia/dist/svg/sprites.svg#it-upload"></use></svg>--%>
+                                        <use href="/node_modules/bootstrap-italia/dist/svg/sprites.svg#it-upload"></use></svg>
                                     <i class="fas fa-cloud-upload-alt mr-2"></i>
                                     <span>File</span>
                                 </label>

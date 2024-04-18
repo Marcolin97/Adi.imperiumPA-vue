@@ -8,33 +8,12 @@ import axios from 'axios';
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 import ContextMenu from '@imengyu/vue3-context-menu'
 
-const handleContextMenu = (event) => {
-  if (event.button === 2) {
-    event.preventDefault();
-    ContextMenu.showContextMenu({
-      x: event.pageX,
-      y: event.pageY,
-      items: [
-        { 
-          label: "Modifica Appuntamento", 
-          onClick: () => {
-            myModal.show();
-            selectedEvent.value = info.event;
-          }
-        },
-        { 
-          label: "A submenu", 
-          children: [
-            { label: "Item1" },
-            { label: "Item2" },
-            { label: "Item3" },
-          ]
-        },
-      ]
-    });
-  }
-};
-const baseUrl = 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api/Dizionari/GetPrestazioni';
+//url che restituisce l'elenco delle prestazioni all'interno degli appuntamenti sul calendario, 
+//bisogna richiedere il corso ogni qualche tempo per permettere di visionare la lista
+//su https://cors-anywhere.herokuapp.com/corsdemo
+const baseApi = axios.create({
+  baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
+});
 let myModal;
 const search1 = ref('');
 const search2 = ref('');
@@ -42,6 +21,7 @@ const date = ref('');
 const selectedEvent = ref(null);
 let elencoPrestazioni = ref([]);
 
+//costante provvisoria che crea appuntamenti nel calendario 
 const event = [
     {
       "id": 67,
@@ -189,6 +169,34 @@ const event = [
     }
   ];
 
+//funzione che permette la creazione del menu contestuale
+const handleContextMenu = (event) => {
+    if(!event.target.classList.contains('fc-event')) {
+      return;
+    }
+    console.log(event);
+    event.preventDefault();
+    ContextMenu.showContextMenu({
+      x: event.pageX,
+      y: event.pageY,
+      items: [
+        { 
+          label: "Modifica Appuntamento", 
+          onClick: () => {
+            myModal.show();            
+          }
+        },
+        { 
+          label: "Elimina Appuntamento", 
+          onClick: () => {            
+          }
+        },
+      ]
+    });
+  
+};
+
+//opzioni del calendario
 const calendarOptions = ref({
   plugins: [dayGridPlugin],
   initialView: 'dayGridMonth',
@@ -205,10 +213,19 @@ const calendarOptions = ref({
   eventClick: function(info) {
     myModal.show();
     selectedEvent.value = info.event;
-    handleContextMenu(info);
+    /* handleContextMenu(info); */
+  },
+  eventDidMount: function(info) {
+    const event = info.event;
+    info.el.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      selectedEvent.value = info.event;
+      handleContextMenu(e);
+    });
   },
 });
 
+//funzione che permette di aggiungere un appuntamento al calendario
 const addEvent = () => {
     calendarOptions.value.events.push({
       id: 2,
@@ -223,12 +240,7 @@ const addEvent = () => {
       borderColor: "",
     });
   };
-  
 
-const baseApi = axios.create({
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
-  
-});
 onMounted(async () => {
   myModal = new Modal(document.getElementById('diagExecVisit'), {
     backdrop: true,
@@ -263,7 +275,7 @@ onMounted(async () => {
         <button @click="addEvent">aggiungi appuntamento al calendario</button>
       </div>
     </div>
-    <div class="calendar" @contextmenu.prevent="handleContextMenu">
+    <div class="calendar">
       <FullCalendar :options='calendarOptions' />
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="diagExecVisit">
