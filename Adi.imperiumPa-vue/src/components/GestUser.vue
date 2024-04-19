@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { Modal } from 'bootstrap-italia';
+import axios from 'axios';
+
+const baseApi = axios.create({
+  baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
+});
+
+let modalSoggetti;
+let soggetti = ref([]);
+
+onMounted(async () => {
+    modalSoggetti = new Modal(document.getElementById('mdElenco'), {
+        keyboard: false
+    });
+    const res = await axios.get("https://adsa.imperiumpa.it/api/Soggetti/ElencoSoggetti");
+    soggetti.value = res.data;
+    console.log(soggetti.value);
+});
+
+</script>
 <template>
 <div class="row justify-content-center flex-row align-items-center">
         <div class="col-lg-12">
@@ -9,7 +31,7 @@
                                 <h3 class="text-primary mb-0">Gestione Dipendenti</h3>
                             </div>
                             <div class="col-sm-6 text-right">
-                                <input type="button" class="btn btn-sm btn-outline-secondary" id="openTabSoggetti" data-target="#mdElenco" data-toggle="modal" value="Elenco Soggetti" />
+                                <input type="button" class="btn btn-sm btn-outline-secondary" id="openTabSoggetti" data-target="#mdElenco" data-toggle="modal" value="Elenco Soggetti" @click="modalSoggetti.show()" />
                             </div>
                         </div>
                     </div>
@@ -302,6 +324,7 @@
             </div>
         </div>
     </div>
+    <!-- modale elenco -->
     <div class="modal alert-modal fade" tabindex="-1" role="dialog" id="mdElenco">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
@@ -310,6 +333,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    {{ soggetti }}
                 </div>
                 <div class="modal-body mt-4">
                     <div class="col">
