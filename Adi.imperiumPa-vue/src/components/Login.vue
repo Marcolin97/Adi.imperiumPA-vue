@@ -1,11 +1,23 @@
 <script setup lang="ts">
+import axios from 'axios';
 import { ref } from 'vue';
+import router from '../router';
+import Dashboard from './Dashboard.vue';
+import baseApiCookie from '../plugin/axios';
 
 const username = ref('');
 const password = ref('');
 
 const submitForm = () => {
   console.log(`Username: ${username.value}, Password: ${password.value}`);
+  baseApiCookie.post('/Account/Login_v2', { nomeUtente: username.value, pwdUtente: password.value })
+  .then((response) => {
+    
+    console.log(JSON.stringify(response.data));
+    document.cookie = `ASP.NET_SessionId=${response.data.sessionID}`;
+    router.push({ name: 'Dashboard' }); 
+    
+  })
 };
 </script>
 

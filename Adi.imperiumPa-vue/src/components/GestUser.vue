@@ -2,19 +2,39 @@
 import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap-italia';
 import axios from 'axios';
-
-const baseApi = axios.create({
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
-});
+import baseApiCookie from '../plugin/axios';
+import Cookie from 'js-cookie';
 
 let modalSoggetti;
 let soggetti = ref([]);
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'http://192.168.0.108/api/Soggetti/ElencoSoggetti',
+  withCredentials: true,
+};
+
+
+let datiSoggetto = {
+    cognome: '',
+    nome: '',
+    codFiscale: '',
+    nascita: '',
+    telefono: '',
+    mail: '',
+    societa: '',
+    login: false
+};
 
 onMounted(async () => {
     modalSoggetti = new Modal(document.getElementById('mdElenco'), {
         keyboard: false
     });
-    const res = await axios.get("https://adsa.imperiumpa.it/api/Soggetti/ElencoSoggetti");
+    const res = await axios.request(config)
+        .then((response) => {
+        console.log(JSON.stringify(response.data));
+    })
     soggetti.value = res.data;
     console.log(soggetti.value);
 });
@@ -61,7 +81,6 @@ onMounted(async () => {
                                         aria-required="true"
                                         class="form-control text-capitalize"
                                         id="cSoggetto"
-                                        placeholder="Cognome"
                                         name="cSoggetto">
                                     <div class="invalid-feedback">
                                         Immettere un cognome valido.
@@ -79,7 +98,6 @@ onMounted(async () => {
                                         type="text"
                                         aria-required="true"
                                         class="form-control text-capitalize"
-                                        placeholder="Nome"
                                         id="nSoggetto"
                                         name="nSoggetto">
                                     <div class="invalid-feedback">
@@ -99,7 +117,6 @@ onMounted(async () => {
                                         aria-required="true"
                                         class="form-control text-uppercase"
                                         id="cfSoggetto"
-                                        placeholder="Codice Fiscale"
                                         name="cfSoggetto">
                                     <div id="errCodFiscale" class="invalid-feedback">
                                         Il C.F. inserito non è corretto.
@@ -116,7 +133,6 @@ onMounted(async () => {
                                         aria-required="true"
                                         class="form-control onlyNumber"
                                         id="celSoggetto"
-                                        placeholder="Telefono"
                                         name="celSoggetto">
                                 </div>
                             </div>
@@ -126,7 +142,6 @@ onMounted(async () => {
                                     <select class="form-control emptyAutoSelect"
                                         required
                                         aria-required="true"
-                                        placeholder="Seleziona Opzione"
                                         name="prSoggetto"
                                         id="prSoggetto"
                                         data-noresults-text="Nessun risultato."
@@ -149,7 +164,6 @@ onMounted(async () => {
                                         aria-required="true"
                                         class="form-control"
                                         id="emSoggetto"
-                                        placeholder="Mail"
                                         name="emSoggetto">
                                     <div class="invalid-feedback">
                                         E-Mail non valida.
