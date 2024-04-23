@@ -374,7 +374,6 @@ onMounted(async () => {
   const res4 = await baseApiCookie.get("Dizionari/MotCambio");
   elencoMotivazioni.value = res4.data;
   
-  await baseApiCookie.post("/Account/Login_v2");
 });
 
 
