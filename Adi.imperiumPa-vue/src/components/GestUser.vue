@@ -31,10 +31,12 @@ onMounted(async () => {
     modalSoggetti = new Modal(document.getElementById('mdElenco'), {
         keyboard: false
     });
+    const res = await baseApiCookie.get('/Soggetti/ElencoSoggetti')
+    /*
     const res = await axios.request(config)
         .then((response) => {
         console.log(JSON.stringify(response.data));
-    })
+    })*/
     soggetti.value = res.data;
     console.log(soggetti.value);
 });

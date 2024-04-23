@@ -13,6 +13,7 @@
     "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/vue3": "^6.1.11",
     "@imengyu/vue3-context-menu": "^1.4.0",
+    "axios": "^1.6.8",
     "bootstrap-italia": "^2.8.4",
     "cookies-ts": "^1.0.5",
     "js-cookie": "^3.0.5",

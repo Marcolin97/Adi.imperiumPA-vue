@@ -7,6 +7,7 @@ import { Modal } from 'bootstrap-italia';
 import axios from 'axios';
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
+import baseApiCookie from '../plugin/axios';
 
 //url che restituisce l'elenco delle prestazioni all'interno degli appuntamenti sul calendario, 
 //bisogna richiedere il corso ogni qualche tempo per permettere di visionare la lista
@@ -364,14 +365,16 @@ onMounted(async () => {
   CambiaOperatoreModal = new Modal(document.getElementById('diagChangeOp'), {
     backdrop: true,
   });
-  const res = await baseApi.get("dizionari/GetPrestazioni");
+  const res = await baseApiCookie.get("dizionari/GetPrestazioni");
   elencoPrestazioni.value = res.data;
-  const res2 = await baseApi.get("Soggetti/ElencoOperatori");
+  const res2 = await baseApiCookie.get("Soggetti/ElencoOperatori");
   elencoOperatori.value = res2.data;
-  const res3 = await baseApi.get("Pazienti/ElencoPazienti");
+  const res3 = await baseApiCookie.get("Pazienti/ElencoPazienti");
   elencoPazienti.value = res3.data;
-  const res4 = await baseApi.get("Dizionari/MotCambio");
+  const res4 = await baseApiCookie.get("Dizionari/MotCambio");
   elencoMotivazioni.value = res4.data;
+  
+  await baseApiCookie.post("/Account/Login_v2");
 });
 
 

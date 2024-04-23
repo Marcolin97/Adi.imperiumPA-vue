@@ -1,8 +1,10 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
+axios.defaults.withCredentials = true
 const baseApiCookie = axios.create({
-    baseURL: 'http://192.168.0.108/api',
+    baseURL: 'http://adsa-api.imperiumpa.it/api',
+    withCredentials : true
 });
 
 export default baseApiCookie;

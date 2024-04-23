@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import router from '../router';
 import Dashboard from './Dashboard.vue';
 import baseApiCookie from '../plugin/axios';
+import Cookies from 'js-cookie';
 
 const username = ref('');
 const password = ref('');
@@ -13,8 +14,9 @@ const submitForm = () => {
   baseApiCookie.post('/Account/Login_v2', { nomeUtente: username.value, pwdUtente: password.value })
   .then((response) => {
     
-    console.log(JSON.stringify(response.data));
-    document.cookie = `ASP.NET_SessionId=${response.data.sessionID}`;
+    console.log(response);
+    //document.cookie = `ASP.NET_SessionId=${response.data.sessionID}`;
+    Cookies.set('prova', 'value')
     router.push({ name: 'Dashboard' }); 
     
   })
