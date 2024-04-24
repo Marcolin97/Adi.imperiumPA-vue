@@ -10,218 +10,7 @@ let soggetti = ref([]);
 
 
 
-const elencoSoggetti = [
-    {
-        "nome": "Alfredo",
-        "cognome": "Ambrosino",
-        "codiceFiscale": "MBRLRD69S08F839W",
-        "ruolo": "Operatore",
-        "telLavoro": "3388916430",
-        "dataNascita": "1969-08-11T00:00:00",
-        "mailUfficio": "ambrosinoalfredo@gmail.com",
-        "idSoggetto": 2,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 2,
-        "nomeUtente": "MBRLRD69S08F839W",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Pietro",
-        "cognome": "Manco",
-        "codiceFiscale": "MNCPTR82C17G309E",
-        "ruolo": "Administrator",
-        "telLavoro": "3930518800",
-        "dataNascita": "1982-03-17T00:00:00",
-        "mailUfficio": "petro.manco@gmail.com",
-        "idSoggetto": 3,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 3,
-        "nomeUtente": "MNCPTR82C17G309E",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Rosario",
-        "cognome": "Schettino",
-        "codiceFiscale": "SCHRSR70R26F839L",
-        "ruolo": "Coordinatore",
-        "telLavoro": null,
-        "dataNascita": "1970-10-26T00:00:00",
-        "mailUfficio": "rosario.schettino@gmail.com",
-        "idSoggetto": 4,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 4,
-        "nomeUtente": "SCHRSR70R26F839L",
-        "idTipoProfilo": 3,
-        "descTipoProfilo": "Coordinatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Maria",
-        "cognome": "De Pietro",
-        "codiceFiscale": "DPTMRA64C70F839G",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1964-03-30T00:00:00",
-        "mailUfficio": "maria.depietro2@gmail.com",
-        "idSoggetto": 5,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 5,
-        "nomeUtente": "DPTMRA64C70F839G",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Faustina",
-        "cognome": "Tondolo",
-        "codiceFiscale": "TNDFTN65D53L219N",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1965-04-13T00:00:00",
-        "mailUfficio": "faustina.tondolo@gmca.edu.it",
-        "idSoggetto": 6,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 6,
-        "nomeUtente": "TNDFTN65D53L219N",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Maria Rosaria",
-        "cognome": "Russo",
-        "codiceFiscale": "RSSMRS52T61F839D",
-        "ruolo": "Operatore",
-        "telLavoro": null,
-        "dataNascita": "1952-12-21T00:00:00",
-        "mailUfficio": "rosario.schettino@gmail.com",
-        "idSoggetto": 7,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 7,
-        "nomeUtente": "RSSMRS52T61F839D",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Aurora",
-        "cognome": "Alfano",
-        "codiceFiscale": "LFNRRA56R47F839U",
-        "ruolo": "Operatore",
-        "telLavoro": null,
-        "dataNascita": "1956-10-17T00:00:00",
-        "mailUfficio": "dirigenza@aganoormarconi.edu.it",
-        "idSoggetto": 8,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 8,
-        "nomeUtente": "LFNRRA56R47F839U",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Bianca",
-        "cognome": "Vinci",
-        "codiceFiscale": "VNCBNC60S56F839Q",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1960-11-16T00:00:00",
-        "mailUfficio": "NAIC8E300D@istruzione.it",
-        "idSoggetto": 9,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 9,
-        "nomeUtente": "VNCBNC60S56F839Q",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Vittorio",
-        "cognome": "Iovinella",
-        "codiceFiscale": "VNLVTR80D23E791O",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1980-04-23T00:00:00",
-        "mailUfficio": "vittorio.iovinella@gmail.com",
-        "idSoggetto": 10,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 10,
-        "nomeUtente": "VNLVTR80D23E791O",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Alessandro",
-        "cognome": "Manco",
-        "codiceFiscale": "MNCLSN89S08B963K",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1989-11-08T00:00:00",
-        "mailUfficio": "p@gmail.com",
-        "idSoggetto": 11,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 11,
-        "nomeUtente": "MNCLSN89S08B963K",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    }
-];
+
 
 let datiSoggetto = {
     cognome: '',
@@ -238,14 +27,8 @@ onMounted(async () => {
     modalSoggetti = new Modal(document.getElementById('mdElenco'), {
         keyboard: false
     });
-    const res = await baseApiCookie.get('/Soggetti/ElencoSoggetti')
-    /*
-    const res = await axios.request(config)
-        .then((response) => {
-        console.log(JSON.stringify(response.data));
-    })*/
+    const res = await baseApiCookie.get("Soggetti/ElencoSoggetti");
     soggetti.value = res.data;
-    console.log(soggetti.value);
 });
 
 </script>
@@ -566,7 +349,7 @@ onMounted(async () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="soggetto in elencoSoggetti" :key="soggetto.codiceFiscale">
+                            <tr v-for="soggetto in soggetti" :key="soggetto.codiceFiscale">
                                 <td>{{ soggetto.codiceFiscale }}</td>
                                 <td>{{ soggetto.cognome }}</td>
                                 <td>{{ soggetto.nome }}</td>

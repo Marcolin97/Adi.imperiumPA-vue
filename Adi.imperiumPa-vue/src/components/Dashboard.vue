@@ -8,6 +8,7 @@ import axios from 'axios';
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
 import baseApiCookie from '../plugin/axios';
+import { isCallSignatureDeclaration } from 'typescript';
 
 
 let AggiornaModal;
@@ -274,7 +275,8 @@ const calendarOptions = ref({
   plugins: [dayGridPlugin],
   initialView: 'dayGridMonth',
   weekends: true,
-  events: event,
+  stickyHeaderDates: true,
+  events: 'https://adsa.imperiumpa.it/api/Calendario/GetVisite',
   contentHeight: 'auto',
   aspectRatio: 2,
   locale: itLocale,
