@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import {HeaderSticky} from 'bootstrap-italia';
 
 
 </script>
@@ -26,10 +24,9 @@ import {HeaderSticky} from 'bootstrap-italia';
                                 <div class="it-right-zone bg-white p-2">
                                     <div class="col col-lg-auto">
                                         <span>
-                                            <a target="_self" class="d-block d-sm-inline-block mr-2" href="Password" style="text-decoration: none;">
-                                                <i class="fas fa-user-circle mr-2"></i>
-                                                <span id="UserLogged" class="d-none d-md-inline">Manco Pietro</span>
-                                            </a>
+                                            <router-link class="nav-link" :to="{ name: 'Password' }"id="nlPassword">
+                                                <span>Nome Utente</span>
+                                            </router-link>
                                         </span>
                                     </div>
                                     <div class="col-auto">

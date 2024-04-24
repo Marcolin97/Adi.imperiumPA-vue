@@ -28,13 +28,9 @@
                                             value=""
                                             title=""
                                             type="text"
-                                            v-model="determina.cup"
-                                            @input="determina.cup = $event.target.value.toUpperCase()"
                                             class="form-control text-uppercase"
                                             id="cupDetermina"
                                             maxlength="15"
-                                            @keypress="CheckInput"
-                                            @keyup="Validation"
                                             placeholder="Codice Unico Progetto"
                                             name="cupDetermina">
                                         <div class="invalid-feedback">
@@ -49,11 +45,6 @@
                                             value=""
                                             title=""
                                             type="text"
-                                            v-model="determina.cig"
-                                            @input="determina.cig = $event.target.value.toUpperCase()"
-                                            @keyup="Validation"
-                                            @keypress="CheckInput"
-                                            @blur="CheckCig($event.target.value)"
                                             class="form-control text-uppercase"
                                             maxlength="10"
                                             id="cigDetermina"
@@ -71,10 +62,6 @@
                                             value=""
                                             title=""
                                             type="text"
-                                            v-model="determina.derivato"
-                                            @input="determina.derivato = $event.target.value.toUpperCase()"
-                                            @keyup="Validation"
-                                            @keypress="CheckInput"
                                             maxlength="10"
                                             class="form-control text-uppercase"
                                             id="derDetermina"
@@ -91,9 +78,6 @@
                                             value=""
                                             title=""
                                             type="text"
-                                            v-model="determina.lotto"
-                                            @input="determina.lotto = $event.target.value.toCapitalize()"
-                                            @keypress="Validation"
                                             name="lottoDetermina"
                                             id="lottoDetermina"
                                             class="form-control text-capitalize"
@@ -112,8 +96,6 @@
                                             type="date"
                                             min="2000-01-01"
                                             max="5000-12-31"
-                                            v-model="determina.stipula"
-                                            @change="Validation"
                                             name="startDetermina"
                                             id="startDetermina"
                                             class="form-control text-upper"
@@ -132,8 +114,6 @@
                                             type="date"
                                             min="2000-01-01"
                                             max="5000-12-31"
-                                            v-model="determina.scadenza"
-                                            @change="Validation"
                                             name="endDetermina"
                                             id="endDetermina"
                                             class="form-control text-upper"
@@ -146,8 +126,8 @@
                             </div>
                             <div class="row justify-content-center pb-4">
                                 <div class="col-sm-12 text-center">
-                                    <button id="addDeterina" @click="SalvaDetermina" type="button" class="btn btn-primary btn-sm m-1"><i class="far fa-save mr-2"></i>Salva</button>
-                                    <button id="resDeterina" @click="Reset" type="button" class="btn btn-secondary btn-sm m-1"><i class="fas fa-redo-alt mr-2"></i>Nuova</button>
+                                    <button id="addDeterina" @click="" type="button" class="btn btn-primary btn-sm m-1"><i class="far fa-save mr-2"></i>Salva</button>
+                                    <button id="resDeterina" @click="" type="button" class="btn btn-secondary btn-sm m-1"><i class="fas fa-redo-alt mr-2"></i>Nuova</button>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +153,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-2 text-center">
-                                <input type="file" name="upload1" @click="Validation" id="fileDetermina" accept="application/pdf" class="upload" />
+                                <input type="file" name="upload1" @click="" id="fileDetermina" accept="application/pdf" class="upload" />
                                 <label for="fileDetermina">
                                     <i class="fas fa-cloud-upload-alt mr-2"></i>
                                     <span>File</span>
@@ -198,7 +178,7 @@
                                 </ul>
                             </div>
                             <div class="col-sm-12 col-md-4 col-lg-2 text-center">
-                                <button id="sendFile" type="button" @click="Allega" class="btn btn-outline-primary btn-sm"><i class="fas fa-paperclip mr-2"></i>Allega Documento</button>
+                                <button id="sendFile" type="button" @click="" class="btn btn-outline-primary btn-sm"><i class="fas fa-paperclip mr-2"></i>Allega Documento</button>
                             </div>
                         </div>
                         <div class="row justify-content-center mb-4">
@@ -232,8 +212,6 @@
                                         title=""
                                         type="date"
                                         name="startPeriodo"
-                                        v-model="autorizzazioni.inizioPeriodo"
-                                        @change="Validation"
                                         id="startPeriodo"
                                         min="2000-01-01"
                                         max="5000-12-31"
@@ -254,8 +232,6 @@
                                         min="2000-01-01"
                                         max="5000-12-31"
                                         name="endPeriodo"
-                                        v-model="autorizzazioni.finePeriodo"
-                                        @change="Validation"
                                         id="endPeriodo"
                                         class="form-control text-upper"
                                         placeholder=" " />
@@ -273,8 +249,6 @@
                                         type="number"
                                         step="1"
                                         name="oreRDC"
-                                        v-model="autorizzazioni.nrOreRdc"
-                                        @keyup="Validation"
                                         id="oreRDC"
                                         class="form-control onlyNumber"
                                         placeholder="Ore per Reddito di Cittadinanza" />
@@ -294,8 +268,6 @@
                                         type="number"
                                         step="1"
                                         name="oreIsee"
-                                        v-model="autorizzazioni.nrOreInf"
-                                        @keyup="Validation"
                                         id="oreIsee"
                                         class="form-control onlyNumber"
                                         placeholder="Ore per ISEE < 6000 €" />
@@ -313,8 +285,6 @@
                                         type="number"
                                         step="1"
                                         name="oreAltri"
-                                        v-model="autorizzazioni.nrOreAltri"
-                                        @keyup="Validation"
                                         id="oreAltri"
                                         class="form-control onlyNumber"
                                         placeholder="Ore Altri" />
@@ -332,7 +302,6 @@
                                         type="number"
                                         step="1"
                                         name="oreModAgg"
-                                        v-model="autorizzazioni.nrOreAgg"
                                         id="oreModAgg"
                                         class="form-control onlyNumber"
                                         placeholder="Ore Aggiuntive" />
@@ -344,7 +313,7 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-sm-12 text-center">
-                                <button id="addAutorizzazioni" @click="addAuthorize" type="button" class="btn btn-primary btn-sm"><i class="fas fa-plus-circle mr-2"></i>Agg. Autorizzazioni</button>
+                                <button id="addAutorizzazioni" @click="" type="button" class="btn btn-primary btn-sm"><i class="fas fa-plus-circle mr-2"></i>Agg. Autorizzazioni</button>
                             </div>
                         </div>
                         <div class="row justify-content-center">

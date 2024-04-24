@@ -9,12 +9,6 @@ import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
 import baseApiCookie from '../plugin/axios';
 
-//url che restituisce l'elenco delle prestazioni all'interno degli appuntamenti sul calendario, 
-//bisogna richiedere il corso ogni qualche tempo per permettere di visionare la lista
-//su https://cors-anywhere.herokuapp.com/corsdemo
-const baseApi = axios.create({
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://adsa.imperiumpa.it/api',
-});
 
 let AggiornaModal;
 let CambiaOperatoreModal;
@@ -373,7 +367,6 @@ onMounted(async () => {
   elencoPazienti.value = res3.data;
   const res4 = await baseApiCookie.get("Dizionari/MotCambio");
   elencoMotivazioni.value = res4.data;
-  
 });
 
 

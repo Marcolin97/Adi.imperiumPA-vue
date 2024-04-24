@@ -4,6 +4,8 @@ import Login from "../components/Login.vue"
 import GestUser from "../components/GestUser.vue"
 import GestPaut from "../components/GestPaut.vue"
 import Determine from "../components/Determine.vue"
+import Password from "C:/dev/project/Adi.imperiumPA-vue/Adi.imperiumPa-vue/src/components/Password.vue";
+
 
 const routes = [
     {
@@ -30,7 +32,12 @@ const routes = [
         path: '/determine',
         name: 'Determine',
         component: Determine,  
-    }
+    },
+    {
+        path: '/password',
+        name: 'Password',
+        component: Password,  
+    },
 ]
 
 const router = createRouter({

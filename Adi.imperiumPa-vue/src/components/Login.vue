@@ -13,12 +13,8 @@ const submitForm = () => {
   console.log(`Username: ${username.value}, Password: ${password.value}`);
   baseApiCookie.post('/Account/Login_v2', { nomeUtente: username.value, pwdUtente: password.value })
   .then((response) => {
-    
     console.log(response);
-    //document.cookie = `ASP.NET_SessionId=${response.data.sessionID}`;
-    Cookies.set('prova', 'value')
-    router.push({ name: 'Dashboard' }); 
-    
+    router.push({ name: 'Dashboard' });
   })
 };
 </script>

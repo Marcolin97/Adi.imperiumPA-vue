@@ -8,12 +8,7 @@ import Cookie from 'js-cookie';
 let modalSoggetti;
 let soggetti = ref([]);
 
-let config = {
-  method: 'get',
-  maxBodyLength: Infinity,
-  url: 'http://192.168.0.108/api/Soggetti/ElencoSoggetti',
-  withCredentials: true,
-};
+
 
 const elencoSoggetti = [
     {
