@@ -1,6 +1,15 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import Cookie from 'js-cookie';
 
+const nome = ref('');
+const cognome = ref('');
 
+onMounted(() => {
+    nome.value = Cookie.get('nome') as string;
+    cognome.value = Cookie.get('cognome') as string;
+    console.log(nome.value, cognome.value);
+});
 </script>
 
 <template>
@@ -25,7 +34,7 @@
                                     <div class="col col-lg-auto">
                                         <span>
                                             <router-link class="nav-link" :to="{ name: 'Password' }"id="nlPassword">
-                                                <span>Nome Utente</span>
+                                                <span style="color:black">{{ nome }} {{ cognome }}</span>
                                             </router-link>
                                         </span>
                                     </div>
