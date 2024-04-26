@@ -1,236 +1,74 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap-italia';
-
+import Cookie from 'js-cookie';
+import baseApiCookie from '../plugin/axios';
 
 let modalPazienti;
-let pazienti= ref([]);
 
-const elencoPazienti = [{
-        "nome": "Alfredo",
-        "cognome": "Ambrosino",
-        "codiceFiscale": "MBRLRD69S08F839W",
-        "ruolo": "Operatore",
-        "telLavoro": "3388916430",
-        "dataNascita": "1969-08-11T00:00:00",
-        "mailUfficio": "ambrosinoalfredo@gmail.com",
-        "idSoggetto": 2,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 2,
-        "nomeUtente": "MBRLRD69S08F839W",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Pietro",
-        "cognome": "Manco",
-        "codiceFiscale": "MNCPTR82C17G309E",
-        "ruolo": "Administrator",
-        "telLavoro": "3930518800",
-        "dataNascita": "1982-03-17T00:00:00",
-        "mailUfficio": "petro.manco@gmail.com",
-        "idSoggetto": 3,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 3,
-        "nomeUtente": "MNCPTR82C17G309E",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Rosario",
-        "cognome": "Schettino",
-        "codiceFiscale": "SCHRSR70R26F839L",
-        "ruolo": "Coordinatore",
-        "telLavoro": null,
-        "dataNascita": "1970-10-26T00:00:00",
-        "mailUfficio": "rosario.schettino@gmail.com",
-        "idSoggetto": 4,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 4,
-        "nomeUtente": "SCHRSR70R26F839L",
-        "idTipoProfilo": 3,
-        "descTipoProfilo": "Coordinatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Maria",
-        "cognome": "De Pietro",
-        "codiceFiscale": "DPTMRA64C70F839G",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1964-03-30T00:00:00",
-        "mailUfficio": "maria.depietro2@gmail.com",
-        "idSoggetto": 5,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 5,
-        "nomeUtente": "DPTMRA64C70F839G",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Faustina",
-        "cognome": "Tondolo",
-        "codiceFiscale": "TNDFTN65D53L219N",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1965-04-13T00:00:00",
-        "mailUfficio": "faustina.tondolo@gmca.edu.it",
-        "idSoggetto": 6,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 6,
-        "nomeUtente": "TNDFTN65D53L219N",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Maria Rosaria",
-        "cognome": "Russo",
-        "codiceFiscale": "RSSMRS52T61F839D",
-        "ruolo": "Operatore",
-        "telLavoro": null,
-        "dataNascita": "1952-12-21T00:00:00",
-        "mailUfficio": "rosario.schettino@gmail.com",
-        "idSoggetto": 7,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 7,
-        "nomeUtente": "RSSMRS52T61F839D",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Aurora",
-        "cognome": "Alfano",
-        "codiceFiscale": "LFNRRA56R47F839U",
-        "ruolo": "Operatore",
-        "telLavoro": null,
-        "dataNascita": "1956-10-17T00:00:00",
-        "mailUfficio": "dirigenza@aganoormarconi.edu.it",
-        "idSoggetto": 8,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 8,
-        "nomeUtente": "LFNRRA56R47F839U",
-        "idTipoProfilo": 4,
-        "descTipoProfilo": "Operatore",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Bianca",
-        "cognome": "Vinci",
-        "codiceFiscale": "VNCBNC60S56F839Q",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1960-11-16T00:00:00",
-        "mailUfficio": "NAIC8E300D@istruzione.it",
-        "idSoggetto": 9,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 9,
-        "nomeUtente": "VNCBNC60S56F839Q",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Vittorio",
-        "cognome": "Iovinella",
-        "codiceFiscale": "VNLVTR80D23E791O",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1980-04-23T00:00:00",
-        "mailUfficio": "vittorio.iovinella@gmail.com",
-        "idSoggetto": 10,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 10,
-        "nomeUtente": "VNLVTR80D23E791O",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    },
-    {
-        "nome": "Alessandro",
-        "cognome": "Manco",
-        "codiceFiscale": "MNCLSN89S08B963K",
-        "ruolo": "Administrator",
-        "telLavoro": null,
-        "dataNascita": "1989-11-08T00:00:00",
-        "mailUfficio": "p@gmail.com",
-        "idSoggetto": 11,
-        "societa": [
-            {
-                "text": "Themis Società Coop. Soc. a R.L.",
-                "value": 1
-            }
-        ],
-        "idUtente": 11,
-        "nomeUtente": "MNCLSN89S08B963K",
-        "idTipoProfilo": 2,
-        "descTipoProfilo": "Administrator",
-        "isAbilitato": true
-    }];
+const elencoPazienti = ref([]);
 
-onMounted (() => {
+const elencoTipologiaPazienti = ref([]);
+const elencoStatocivile = ref([]);
+const elencoTipoOccupazione = ref([]);
+const elencoTipoFondi = ref([]);
+
+
+let paziente = ref({
+    "comune": "",
+    "municipalita": "",
+    "tipologia": "",
+    "nome": "",
+    "cognome": "",
+    "codFiscale": "",
+    "nascita": "",
+    "codStatoCiv": "",
+    "codTipoOcc": "",
+    "viveSolo": false,
+    "is104": false,
+    "isValUvi": false,
+});
+
+const savePaziente = async () => {
+    let pazienteString = JSON.stringify(paziente.value);
+    Cookie.set('paziente', pazienteString);
+}
+
+const resetPaziente = () => {
+    paziente.value = {
+        "comune": "",
+        "municipalita": "",
+        "tipologia": "",
+        "nome": "",
+        "cognome": "",
+        "codFiscale": "",
+        "nascita": "",
+        "codStatoCiv": "",
+        "codTipoOcc": "",
+        "viveSolo": false,
+        "is104": false,
+        "isValUvi": false,
+    };
+}
+
+
+
+onMounted (async () => {
     modalPazienti = new Modal(document.getElementById('mdElenco'), {
         keyboard: false
     });
+    const res = await baseApiCookie.get("Pazienti/ElencoPazienti");
+    elencoPazienti.value = res.data;
+    const res1 = await baseApiCookie.get("Dizionari/TipologiaPaziente");
+    elencoTipologiaPazienti.value = res1.data;
+    const res2 = await baseApiCookie.get("Dizionari/StatoCivile");
+    elencoStatocivile.value = res2.data;
+    const res3 = await baseApiCookie.get("Dizionari/Occupazione");
+    elencoTipoOccupazione.value = res3.data;
+    const res4 = await baseApiCookie.get("Dizionari/Fondo");
+    elencoTipoFondi.value = res4.data;
 });
-
-
 </script>
-
-
-
-
-
-
 <template>
     <div class="row justify-content-center flex-row align-items-center">
         <div class="col-lg-12">
@@ -264,15 +102,14 @@ onMounted (() => {
                             <div class="col-sm-6 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label for="comSoggetto" class="active">Comune</label>
-                                    <select class="form-control emptyAutoSelect"
+                                    <input type="text" class="form-control"
                                         required
+                                        v-model="paziente.comune"
                                         aria-required="true"
                                         placeholder="Seleziona Opzione"
                                         name="comSoggetto"
                                         id="comSoggetto"
-                                        data-noresults-text="Nessun risultato."
                                         autocomplete="off">
-                                    </select>
                                     <div class="invalid-feedback">
                                         Selezionare il comune dell'utente.
                                     </div>
@@ -281,15 +118,14 @@ onMounted (() => {
                             <div class="col-sm-6 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label for="munSoggetto" class="active">Municipalità/Circoscrizione</label>
-                                    <select class="form-control emptyAutoSelect"
+                                    <input type="text" class="form-control"
                                         required
+                                        v-model="paziente.municipalita"
                                         aria-required="true"
                                         placeholder="Seleziona Opzione"
                                         name="munSoggetto"
                                         id="munSoggetto"
-                                        data-noresults-text="Nessun risultato."
                                         autocomplete="off">
-                                    </select>
                                     <div class="invalid-feedback">
                                         Selezionare la municipalità/circoscrizione dell'utente.
                                     </div>
@@ -306,6 +142,7 @@ onMounted (() => {
                                         id="tpSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option v-for="tp in elencoTipologiaPazienti" :key="tp.codice" :value="tp.codice">{{ tp.descrizione }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Selezionare la tipologia dell'utente.
@@ -318,8 +155,8 @@ onMounted (() => {
                                 <div class="form-group">
                                     <label for="cSoggetto">Cognome</label>
                                     <input required
+                                        v-model="paziente.cognome"
                                         autocomplete="off"
-                                        value=""
                                         title=""
                                         type="text"
                                         minlength="3"
@@ -337,8 +174,8 @@ onMounted (() => {
                                 <div class="form-group">
                                     <label for="nSoggetto">Nome</label>
                                     <input required
+                                        v-model="paziente.nome"
                                         autocomplete="off"
-                                        value=""
                                         title=""
                                         minlength="3"
                                         type="text"
@@ -356,9 +193,9 @@ onMounted (() => {
                                 <div class="form-group">
                                     <label for="cfSoggetto">Codice Fiscale</label>
                                     <input required
+                                        v-model="paziente.codFiscale"
                                         autocomplete="off"
                                         pattern="^[A-Za-z]{6}[0-9]{2}[A-Za-z]{1}[0-9]{2}[A-Za-z]{1}[A-Za-z0-9]{3}[A-Za-z0-9]{1}"
-                                        value=""
                                         title=""
                                         type="text"
                                         aria-required="true"
@@ -376,8 +213,8 @@ onMounted (() => {
                                 <div class="form-group">
                                     <label for="dnSoggetto">Data di Nascita</label>
                                     <input required
+                                        v-model="paziente.nascita"
                                         autocomplete="off"
-                                        value=""
                                         title=""
                                         type="text"
                                         min="1900-01-01"
@@ -405,6 +242,7 @@ onMounted (() => {
                                         id="stSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option v-for="st in elencoStatocivile" :key="st.codice" :value="st.codice">{{ st.descrizione }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Selezionare lo stato civile da associare.
@@ -422,6 +260,7 @@ onMounted (() => {
                                         id="toSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option v-for="to in elencoTipoOccupazione" :key="to.codice" :value="to.codice">{{ to.descrizione }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Selezionare la tipologia di occupazione.
@@ -432,7 +271,7 @@ onMounted (() => {
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group" style="margin-bottom: 1rem">
                                     <div class="form-check">
-                                        <input type="checkbox" id="viveSolo" />
+                                        <input type="checkbox" id="viveSolo" v-model="paziente.viveSolo">
                                         <label for="viveSolo">Vive Solo</label>
                                     </div>
                                 </div>
@@ -440,7 +279,7 @@ onMounted (() => {
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group" style="margin-bottom: 1rem">
                                     <div class="form-check">
-                                        <input type="checkbox" id="legge104">
+                                        <input type="checkbox" id="legge104" v-model="paziente.is104">
                                         <label for="legge104">Legge 104</label>
                                     </div>
                                 </div>
@@ -448,7 +287,7 @@ onMounted (() => {
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group" style="margin-bottom: 1rem">
                                     <div class="form-check">
-                                        <input type="checkbox" id="isUvi">
+                                        <input type="checkbox" id="isUvi" v-model="paziente.isValUvi">
                                         <label for="isUvi">Valutato UVI</label>
                                     </div>
                                 </div>
@@ -457,8 +296,8 @@ onMounted (() => {
                         </div>
                         <div class="row justify-content-center" style="margin-bottom: 3rem">
                             <div class="col-auto text-center">
-                                <button id="saveSoggetto" class="btn btn-primary btn-md"><i class="far fa-share-square mr-2"></i>Salva</button>
-                                <button id="resetSoggetto" type="button" class="btn btn-secondary btn-md"><i class="fas fa-redo-alt mr-2"></i>Reset</button>
+                                <button id="saveSoggetto" class="btn btn-primary btn-md" @click=savePaziente()><i class="far fa-share-square mr-2"></i>Salva</button>
+                                <button id="resetSoggetto" type="button" class="btn btn-secondary btn-md" @click="resetPaziente()"><i class="fas fa-redo-alt mr-2"></i>Reset</button>
                             </div>
                         </div>
                         <!-- FINE Anagrafica Paziente -->
@@ -842,8 +681,8 @@ onMounted (() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="paziente in elencoPazienti" :key="paziente.codiceFiscale">
-                                    <td>{{ paziente.codiceFiscale }}</td>
+                                <tr v-for="paziente in elencoPazienti" :key="paziente.codFiscale">
+                                    <td>{{ paziente.codFiscale }}</td>
                                     <td>{{ paziente.cognome }}</td>
                                     <td>{{ paziente.nome }}</td>
                                 </tr>
@@ -853,7 +692,7 @@ onMounted (() => {
                 </div>
                 <div class="modal-footer">
                     <div class="modal-footer justify-content-between">
-                        <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="modalSoggetti.hide()">Chiudi</button>
+                        <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="modalPazienti.hide()">Chiudi</button>
                     </div>
                 </div>
             </div>

@@ -4,11 +4,9 @@ import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import itLocale from '@fullcalendar/core/locales/it';
 import { Modal } from 'bootstrap-italia';
-import axios from 'axios';
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
 import baseApiCookie from '../plugin/axios';
-import { isCallSignatureDeclaration } from 'typescript';
 
 
 let AggiornaModal;

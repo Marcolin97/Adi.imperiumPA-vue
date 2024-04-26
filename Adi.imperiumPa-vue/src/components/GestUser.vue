@@ -7,21 +7,47 @@ import Cookie from 'js-cookie';
 
 let modalSoggetti;
 let soggetti = ref([]);
+const elencosocieta = ref([]);
+const elencoprofili = ref([]);
+const elencodocumenti = ref([]);
 
-
-
-
-
-let datiSoggetto = {
+let Soggetto = ref({
     cognome: '',
     nome: '',
     codFiscale: '',
-    nascita: '',
     telefono: '',
+    profilo: '',
     mail: '',
     societa: '',
     login: false
+});
+
+let Postdata = {
+    idSoggetto: '',
+    codiceFiscale: '',
+    codTipoDoc: '',
+    descTipoDoc: '',
+    idUtenteIns: '',
+} 
+
+const resetForm = () => {
+    Soggetto.value = {
+        cognome: '',
+        nome: '',
+        codFiscale: '',
+        telefono: '',
+        profilo: '',
+        mail: '',
+        societa: '',
+        login: false
+    };
 };
+
+const saveSoggetto = async () => {
+    let SoggettoString = JSON.stringify(Soggetto);
+    Cookie.set('Soggetto', SoggettoString);
+};
+
 
 onMounted(async () => {
     modalSoggetti = new Modal(document.getElementById('mdElenco'), {
@@ -29,6 +55,12 @@ onMounted(async () => {
     });
     const res = await baseApiCookie.get("Soggetti/ElencoSoggetti");
     soggetti.value = res.data;
+    const res2 = await baseApiCookie.get("dizionari/getsocieta");
+    elencosocieta.value = res2.data;
+    const res3 = await baseApiCookie.get("dizionari/getprofili");
+    elencoprofili.value = res3.data;
+    const res4 = await baseApiCookie.get("dizionari/docop");
+    elencodocumenti.value = res4.data;
 });
 
 </script>
@@ -66,14 +98,14 @@ onMounted(async () => {
                                     <label for="cSoggetto">Cognome</label>
                                     <input required
                                         autocomplete="off"
-                                        value=""
                                         title=""
                                         type="text"
                                         minlength="3"
                                         aria-required="true"
                                         class="form-control text-capitalize"
                                         id="cSoggetto"
-                                        name="cSoggetto">
+                                        name="cSoggetto"
+                                        v-model="Soggetto.cognome">
                                     <div class="invalid-feedback">
                                         Immettere un cognome valido.
                                     </div>
@@ -84,7 +116,7 @@ onMounted(async () => {
                                     <label for="nSoggetto">Nome</label>
                                     <input required
                                         autocomplete="off"
-                                        value=""
+                                        v-model="Soggetto.nome"
                                         title=""
                                         minlength="3"
                                         type="text"
@@ -103,7 +135,7 @@ onMounted(async () => {
                                     <input 
                                         autocomplete="off"
                                         pattern="^[A-Za-z]{6}[0-9]{2}[A-Za-z]{1}[0-9]{2}[A-Za-z]{1}[A-Za-z0-9]{3}[A-Za-z0-9]{1}"
-                                        value=""
+                                        v-model="Soggetto.codFiscale"
                                         title=""
                                         type="text"
                                         aria-required="true"
@@ -119,9 +151,9 @@ onMounted(async () => {
                                 <div class="form-group">
                                     <label for="celSoggetto">Telefono</label>
                                     <input autocomplete="off"
-                                        value=""
-                                        title=""
-                                        type="number"
+                                        v-model="Soggetto.telefono"
+                                        title="number"
+                                        type="text"
                                         aria-required="true"
                                         class="form-control onlyNumber"
                                         id="celSoggetto"
@@ -133,11 +165,14 @@ onMounted(async () => {
                                     <label for="prSoggetto" class="active">Profilo</label>
                                     <select class="form-control emptyAutoSelect"
                                         required
+                                        v-model="Soggetto.profilo"
                                         aria-required="true"
                                         name="prSoggetto"
                                         id="prSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option value="">Seleziona il Profilo</option>
+                                        <option v-for="profilo in elencoprofili" :key="profilo.codice" :value="profilo.codice">{{ profilo.descrizione }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Selezionare il profilo da associare.
@@ -149,7 +184,7 @@ onMounted(async () => {
                                     <label for="emSoggetto">Mail</label>
                                     <input required
                                         autocomplete="off"
-                                        value=""
+                                        v-model="Soggetto.mail"
                                         title=""
                                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                         type="text"
@@ -169,12 +204,15 @@ onMounted(async () => {
                                     <label for="socSoggetto" class="active">Società</label>
                                     <select class="form-control emptyAutoSelect"
                                         required
+                                        v-model="Soggetto.societa"
                                         aria-required="true"
                                         placeholder="Seleziona Opzione"
                                         name="socSoggetto"
                                         id="socSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option value="">Seleziona la società</option>
+                                        <option v-for="societa in elencosocieta" :key="societa.value" :value="societa.value">{{ societa.text }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Selezionare il la società di appartenenza.
@@ -185,15 +223,15 @@ onMounted(async () => {
                                 <div class="toggles">
                                     <label for="activeLogin" style="padding-left:.5rem">
                                         Abilita Login
-                                    <input type="checkbox" id="activeLogin"><span class="lever"></span>
+                                    <input type="checkbox" id="activeLogin" v-model="Soggetto.login"><span class="lever"></span>
                                     </label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-auto text-center">
-                            <button id="saveSoggetto" class="btn btn-primary btn-md"><i class="far fa-share-square mr-2"></i>Salva</button>
-                            <button id="resetSoggetto" type="button" class="btn btn-secondary btn-md"><i class="fas fa-redo-alt mr-2"></i>Reset</button>
+                            <button id="saveSoggetto" class="btn btn-primary btn-md" @click="saveSoggetto()"><i class="far fa-share-square mr-2" ></i>Salva</button>
+                            <button id="resetSoggetto" type="button" class="btn btn-secondary btn-md" @click="resetForm()"><i class="fas fa-redo-alt mr-2"></i>Reset</button>
                         </div>
                     </div>
                 </div>
@@ -219,7 +257,10 @@ onMounted(async () => {
                                         name="tdSoggetto"
                                         id="tdSoggetto"
                                         data-noresults-text="Nessun risultato."
-                                        autocomplete="off">
+                                        autocomplete="off"
+                                        v-model="elencodocumenti">
+                                        <option value="">Tipo di Documento</option>
+                                        <option v-for="documento in elencodocumenti" :key="documento.codice" :value="documento.codice">{{ documento.descrizione }}</option>
                                     </select>
                                     <div id="errTdSoggetto" class="invalid-feedback">
                                         Selezionare il tipo di documento da associare.

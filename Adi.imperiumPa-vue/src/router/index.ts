@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/Login.vue"
 import GestUser from "../components/GestUser.vue"
-import GestPaut from "../components/GestPaut.vue"
+import GestPuat from "../components/GestPuat.vue"
 import Determine from "../components/Determine.vue"
 import Password from "C:/dev/project/Adi.imperiumPA-vue/Adi.imperiumPa-vue/src/components/Password.vue";
 
@@ -26,7 +26,7 @@ const routes = [
     {
         path: '/pazienti',
         name: 'Pazienti',
-        component: GestPaut,
+        component: GestPuat,
     },
     {
         path: '/determine',
