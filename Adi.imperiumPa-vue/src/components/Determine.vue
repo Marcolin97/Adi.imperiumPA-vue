@@ -1,3 +1,8 @@
+<script setup lang="ts">
+
+
+
+</script>
 <template>
 <div class="row justify-content-center flex-row align-items-center" id="appDetermina">
         <div class="col-lg-12">

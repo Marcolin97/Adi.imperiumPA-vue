@@ -13,6 +13,18 @@ const elencoStatocivile = ref([]);
 const elencoTipoOccupazione = ref([]);
 const elencoTipoFondi = ref([]);
 
+let valutazioneUvi = ref({
+    "fondo": "",
+    "nrProtUvi": "",
+    "dataProtUvi": "",
+    "valIsee": "",
+    "inizio": "",
+    "fine": "",
+    "oreSettimanali": "",
+    "quotaSociale": "",
+    "quotaCompa": "",
+});
+
 
 let paziente = ref({
     "comune": "",
@@ -315,6 +327,7 @@ onMounted (async () => {
                                         id="tfSoggetto"
                                         data-noresults-text="Nessun risultato."
                                         autocomplete="off">
+                                        <option v-for="tf in elencoTipoFondi" :key="tf.codice" :value="tf.codice">{{ tf.descrizione }}</option>
                                     </select>
                                     <div id="errTfSoggetto" class="invalid-feedback">
                                         Selezionare la tipologia di fondo.
@@ -325,8 +338,8 @@ onMounted (async () => {
                                 <div class="form-group">
                                     <label for="protUvi">Protocollo UVI</label>
                                     <input autocomplete="off"
+                                        v-model="valutazioneUvi.nrProtUvi"
                                         data-source="nrProtUvi"
-                                        value=""
                                         title=""
                                         type="number"
                                         min="1"
@@ -345,7 +358,7 @@ onMounted (async () => {
                                     <label for="dataUVI">Data U.V.I.</label>
                                     <input autocomplete="off"
                                         data-source="dataProtUvi"
-                                        value=""
+                                        v-model="valutazioneUvi.dataProtUvi"
                                         title=""
                                         type="text"
                                         id="dataUVI"
@@ -384,7 +397,7 @@ onMounted (async () => {
                                     <label for="valIsee">I.S.E.E.</label>
                                     <input autocomplete="off"
                                         data-source="valIsee"
-                                        value=""
+                                        v-model="valutazioneUvi.valIsee"
                                         title=""
                                         type="number"
                                         step="0.01"
@@ -402,7 +415,7 @@ onMounted (async () => {
                                     <label for="dataInizio">Data Inizio</label>
                                     <input autocomplete="off"
                                         data-source="inizio"
-                                        value=""
+                                        v-model="valutazioneUvi.inizio"
                                         title=""
                                         type="text"
                                         id="dataInizio"
@@ -423,7 +436,7 @@ onMounted (async () => {
                                     <label for="dataFine">Data Fine</label>
                                     <input autocomplete="off"
                                         data-source="fine"
-                                        value=""
+                                        v-model="valutazioneUvi.fine"
                                         title=""
                                         type="text"
                                         id="dataFine"
@@ -444,7 +457,7 @@ onMounted (async () => {
                                     <label for="oreSetti">Ore Settimanali</label>
                                     <input autocomplete="off"
                                         data-source="oreSettimanali"
-                                        value=""
+                                        v-model="valutazioneUvi.oreSettimanali"
                                         title=""
                                         type="number"
                                         min="1"
@@ -460,10 +473,10 @@ onMounted (async () => {
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label for="qtSociale"></label>
+                                    <label for="qtSociale">Quota Sociale</label>
                                     <input autocomplete="off"
                                         data-source="quotaSociale"
-                                        value=""
+                                        v-model="valutazioneUvi.quotaSociale"
                                         title=""
                                         type="number"
                                         class="form-control"
@@ -481,7 +494,7 @@ onMounted (async () => {
                                   <label for="qtCompa">Quota Utente</label>
                                     <input autocomplete="off"
                                         data-source="quotaCompa"
-                                        value=""
+                                        v-model="valutazioneUvi.quotaCompa"
                                         title=""
                                         type="number"
                                         min="1"
