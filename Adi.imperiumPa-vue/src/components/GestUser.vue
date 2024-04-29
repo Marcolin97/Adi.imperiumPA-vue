@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap-italia';
-import axios from 'axios';
 import baseApiCookie from '../plugin/axios';
 import Cookie from 'js-cookie';
 
@@ -373,7 +372,7 @@ onMounted(async () => {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS" @click="selectSoggetto()">Seleziona</button>
-                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button">Chiudi</button>
+                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="modalRicerca.hide()">Chiudi</button>
                 </div>
             </div>
         </div>

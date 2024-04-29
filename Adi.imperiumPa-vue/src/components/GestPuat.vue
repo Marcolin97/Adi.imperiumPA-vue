@@ -5,6 +5,7 @@ import Cookie from 'js-cookie';
 import baseApiCookie from '../plugin/axios';
 
 let modalPazienti;
+let modalRicerca;
 
 const elencoPazienti = ref([]);
 
@@ -12,6 +13,40 @@ const elencoTipologiaPazienti = ref([]);
 const elencoStatocivile = ref([]);
 const elencoTipoOccupazione = ref([]);
 const elencoTipoFondi = ref([]);
+const searchTerm = ref("");
+
+const searchSoggetto = async () => {
+    const res = await baseApiCookie.get("Pazienti/ElencoPazienti", {
+        params: {
+            searchTerm: searchTerm.value
+        }
+    });
+    elencoPazienti.value = res.data;
+}
+let Soggetto = ref({
+    "comune": "",
+    "municipalita": "",
+    "tipologia": "",
+    "nome": "",
+    "cognome": "",
+    "codFiscale": "",
+    "nascita": "",
+    "codStatoCiv": "",
+    "codTipoOcc": "",
+    "viveSolo": false,
+    "is104": false,
+    "isValUvi": false,
+});
+
+const selectSoggetto = () => {
+  const selectedSoggetto = elencoPazienti.value.find(soggetto => soggetto.codFiscale === searchTerm.value);
+  if (selectedSoggetto) {
+    Object.assign(Soggetto.value, selectedSoggetto);
+  }
+  console.log(Soggetto);
+  console.log(selectedSoggetto);
+  modalRicerca.hide();
+};
 
 let valutazioneUvi = ref({
     "fondo": "",
@@ -69,6 +104,9 @@ onMounted (async () => {
     modalPazienti = new Modal(document.getElementById('mdElenco'), {
         keyboard: false
     });
+    modalRicerca = new Modal(document.getElementById('openFindSog'), {
+        keyboard: false
+    });
     const res = await baseApiCookie.get("Pazienti/ElencoPazienti");
     elencoPazienti.value = res.data;
     const res1 = await baseApiCookie.get("Dizionari/TipologiaPaziente");
@@ -103,7 +141,7 @@ onMounted (async () => {
                                 <h5 class="mb-5 text-left text-primary" id="intestazione">Anagrafica Pazienti</h5>
                             </div>
                             <div class="col-sm-6 text-right">
-                                <span class="text-primary" data-toggle="modal" data-target="#openFindSog" style="cursor: pointer">Ricerca Utente</span>
+                                <span class="text-primary" data-toggle="modal" data-target="#openFindSog" style="cursor: pointer" @click="modalRicerca.show()">Ricerca Paziente</span>
                                 <a class="search-link rounded-icon" aria-label="Cerca" href="#" data-toggle="modal" data-target="#openFindSog">
                                     <svg class="icon">
                                         <use href="/node_modules/bootstrap-italia/dist/svg/sprites.svg#it-search"></use></svg>
@@ -624,12 +662,13 @@ onMounted (async () => {
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
-                                        <span><i class="fas fa-user-alt" style="color: #06c!important"></i></span>
+                                    <span><i class="fas fa-user-alt" style="color: #06c!important"></i></span>
                                     </div>
                                 </div>
                                 <label for="searchSogg">Ricerca Utente</label>
-                                <input autocomplete="off"
-                                    value=""
+                                <input
+                                    list="soggetti"
+                                    autocomplete="off"
                                     title=""
                                     type="text"
                                     data-noresults-text="Nessuna Corrispondenza"
@@ -637,14 +676,20 @@ onMounted (async () => {
                                     class="form-control text-uppercase basicAutoComplete"
                                     placeholder="Ricerca per Nome, Cognome o Codice Fiscale"
                                     id="searchSogg"
-                                    name="searchSogg">
+                                    name="searchSogg"
+                                    v-model="searchTerm"
+                                    @input="searchSoggetto()"
+                                >
+                                <datalist id="soggetti">
+                                    <option v-for="soggetto in elencoPazienti" :key="soggetto.codFiscale" :value="soggetto.codFiscale">{{ soggetto.codFiscale }} - {{ soggetto.cognome }} {{ soggetto.nome }} - {{ soggetto.comune }}</option>
+                                </datalist>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS">Seleziona</button>
-                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button">Chiudi</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" id="selectFS" @click="selectSoggetto()">Seleziona</button>
+                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal" type="button" @click="modalRicerca.hide()">Chiudi</button>
                 </div>
             </div>
         </div>
