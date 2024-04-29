@@ -43,9 +43,10 @@ onMounted(() => {
                                     </a>
                                 </div>
                                 <div v-if="isLoggedIn" class="it-right-zone bg-white p-2"> 
-                                    <div class="col col-lg-auto">
+                                    <div class="col col-lg-auto ">
                                         <span>
                                             <router-link class="nav-link" :to="{ name: 'Password' }" id="nlPassword">
+                                                <i class="fa-solid fa-user"></i>
                                                 <span style="color:black">{{ nome }} {{ cognome }}</span>
                                             </router-link>
                                         </span>
@@ -94,9 +95,9 @@ onMounted(() => {
                                                 </router-link>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="Determine" id="nlDetermine">
+                                                <router-link class="nav-link" :to="{ name: 'Determine' }" id="nlDetermine">
                                                     <span>Gestione Determine</span>
-                                                </a>
+                                                </router-link>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" href="Report" id="nlReport">
