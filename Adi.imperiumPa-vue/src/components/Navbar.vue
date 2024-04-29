@@ -12,6 +12,7 @@ const logout = () => {
     Cookie.remove('LoggedUser');
     Cookie.remove('cognome');
     Cookie.remove('nome');
+    Cookie.remove('mail');
     router.push({ name: 'Login' });
     isLoggedIn.value = false;
 };
@@ -29,6 +30,7 @@ onMounted(() => {
     <header class="it-header-wrapper">
         <div class="it-nav-wrapper">
             <div class="it-header-center-wrapper">
+                
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
@@ -100,14 +102,14 @@ onMounted(() => {
                                                 </router-link>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="Report" id="nlReport">
+                                                <router-link class="nav-link" :to="{ name: 'Report' }" id="nlReport">
                                                     <span>Report</span>
-                                                </a>
+                                                </router-link>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="Contatti" id="nlContatti">
+                                                <router-link class="nav-link" :to="{ name: 'Contatti' }" id="nlContatti">
                                                     <span>Contatti</span>
-                                                </a>
+                                                </router-link>
                                             </li>
                                         </ul>
                                     </div>

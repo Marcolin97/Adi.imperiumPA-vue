@@ -21,9 +21,11 @@ const submitForm = () => {
     let decodedString = decodeURIComponent(encodedString);
     let nome=data.nome;
     let cognome=data.cognome;
+    let mail=data.mail;
     Cookie.set('nome', nome);
     Cookie.set('cognome', cognome);
-    console.log(nome,cognome);
+    Cookie.set('mail', mail);
+    console.log(nome,cognome, mail);
   })
 };
 

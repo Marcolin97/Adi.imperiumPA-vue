@@ -5,6 +5,8 @@ import GestUser from "../components/GestUser.vue"
 import GestPuat from "../components/GestPuat.vue"
 import Determine from "../components/Determine.vue"
 import Password from "C:/dev/project/Adi.imperiumPA-vue/Adi.imperiumPa-vue/src/components/Password.vue";
+import Report from "../components/Report.vue"
+import Contatti from "../components/Contatti.vue"
 
 
 const routes = [
@@ -38,6 +40,17 @@ const routes = [
         name: 'Password',
         component: Password,  
     },
+    {
+        path: '/report',
+        name: 'Report',
+        component: Report,
+    },
+    {
+        path: '/contatti',
+        name: 'Contatti',
+        component: Contatti,
+    }
+
 ]
 
 const router = createRouter({
